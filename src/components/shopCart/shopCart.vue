@@ -6,7 +6,7 @@
           <div class="logo" :class="{'highlight': totalCount >0}">
             <span class="">车</span>
           </div>
-          <div class="num">{{totalCount}}</div>
+          <div class="num" v-show="totalCount>0">{{totalCount}}</div>
         </div>
         <span class="price" :class="{'highlight': totalPrice >0}">￥{{totalPrice}}</span>
         <span class="desc">另需配送费￥{{deliveryPrice}}元</span>
@@ -14,6 +14,11 @@
       <div class="content-right">
         <div class="pay" :class="payClass">{{payDesc}}</div>
       </div>
+    </div>
+    <div class="ball-container">
+        <div transition-group="drap" v-for=" ball in balls" v-show="ball.show" class="ball">
+          <div class="inner"></div>
+        </div>
     </div>
   </div>
 </template>
@@ -24,12 +29,7 @@
       selectFoods: {
         type: Array,
         default () {
-          return [
-            {
-              price: 12,
-              count: 2
-            }
-          ]
+          return []
         }
       },
       deliveryPrice: {
@@ -39,6 +39,27 @@
       minPrice: {
         type: Number,
         default: 0
+      }
+    },
+    data () {
+      return {
+        balls: [
+          {
+            show: false
+          },
+          {
+            show: false
+          },
+          {
+            show: false
+          },
+          {
+            show: false
+          },
+          {
+            show: false
+          }
+        ]
       }
     },
     computed: {

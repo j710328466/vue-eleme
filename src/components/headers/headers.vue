@@ -14,7 +14,7 @@
         </div>
         <div v-if="seller.supports" class="support">
           <span class="icon" :class="classMap[seller.supports[0].type]"></span>
-          <icon class="text">{{seller.supports[0].description}}</icon>
+          <i class="text">{{seller.supports[0].description}}</i>
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>

@@ -12,6 +12,9 @@
         </li>
       </ul>
     </div>
+    <shop-cart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice"
+     :min-price="seller.minPrice"
+    ></shop-cart>
     <div class="foods-wrapper" >
       <ul>
         <li v-for="item in goods" class="food-list food-list-hook">
@@ -32,22 +35,22 @@
                   <span class="now">￥{{food.price}}</span>
                   <span class="old" v-show="food.oldPrice">{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontral-wrapper">
+                  <cart-contral :food="food"></cart-contral>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shop-cart :delivery-price="seller.deliveryPrice"
-     :min-price="seller.minPrice"
-    ></shop-cart>
   </div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
 import shopCart from '../shopCart/shopCart.vue'
-
+import cartContral from '../cartContral/cartcontral.vue'
 const ERR_OK = 0
 export default {
   props: {
@@ -63,19 +66,30 @@ export default {
     }
   },
   components: {
-    shopCart
+    shopCart,
+    cartContral
   },
   computed: {
     currentIndex () {
       for (let i = 0; i < this.listHeight.length; i++) {
         let height1 = this.listHeight[i]
-        console.log(height1[i])
         let height2 = this.listHeight[i + 1]
         if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
           return i
         }
       }
       return 0
+    },
+    selectFoods () {
+      let foods = []
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if (food.count) {
+            foods.push(food)
+          }
+        })
+      })
+      return foods
     }
   },
   created () {
@@ -105,7 +119,8 @@ export default {
         click: true
       })
       this.foodsScroll = new BScroll(this.$el.lastChild, {
-        probeType: 3
+        probeType: 3,
+        click: true
       })
       this.foodsScroll.on('scroll', (pos) => {
         this.scrollY = Math.abs(Math.round(pos.y))
