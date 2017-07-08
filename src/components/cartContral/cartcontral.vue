@@ -4,7 +4,7 @@
       <div class="cart-decrase" v-show="food.count>0" @click="decraseCart">-</div>
     </transition>
     <div class="cart-count" v-show="food.count>0">{{food.count}}</div>
-    <div class="cart-add" @click="addCart">+</div>
+    <div class="cart-add" ref="shopcart" @click="addCart">+</div>
   </div>
 </template>
 
@@ -17,7 +17,7 @@
       }
     },
     created () {
-      console.log(Vue.set)
+      console.log()
     },
     methods: {
       decraseCart (event) {
@@ -32,12 +32,12 @@
         if (!event._constructed) {
           return
         }
-        console.log(this)
         if (!this.food.count) {
           Vue.set(this.food, 'count', 1)
         } else {
           this.food.count++
         }
+        this.$emit('listen', this.$el.lastChild)
       }
     }
   }

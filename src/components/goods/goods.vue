@@ -12,7 +12,7 @@
         </li>
       </ul>
     </div>
-    <shop-cart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice"
+    <shop-cart  ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice"
      :min-price="seller.minPrice"
     ></shop-cart>
     <div class="foods-wrapper" >
@@ -36,7 +36,7 @@
                   <span class="old" v-show="food.oldPrice">{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontral-wrapper">
-                  <cart-contral :food="food"></cart-contral>
+                  <cart-contral v-on:listen="_drop" :food="food"></cart-contral>
                 </div>
               </div>
             </li>
@@ -106,6 +106,9 @@ export default {
     })
   },
   methods: {
+    _drop (target) {
+      this.$refs.shopcart.drop(target)
+    },
     selectMenu (index, event) {
       if (!event._constructed) {
         return
