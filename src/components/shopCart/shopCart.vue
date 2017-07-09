@@ -1,8 +1,8 @@
 <template>
   <div class="shopcart">
-    <div class="content">
+    <div class="content" >
       <div class="content-left">
-        <div class="logo-wrapper">
+        <div class="logo-wrapper" @click="toggleList">
           <div class="logo" :class="{'highlight': totalCount >0}">
             <span class="">车</span>
           </div>
@@ -11,7 +11,7 @@
         <span class="price" :class="{'highlight': totalPrice >0}">￥{{totalPrice}}</span>
         <span class="desc">另需配送费￥{{deliveryPrice}}元</span>
       </div>
-      <div class="content-right">
+      <div class="content-right" @click="pay">
         <div class="pay" :class="payClass">{{payDesc}}</div>
       </div>
     </div>
@@ -19,16 +19,39 @@
       <transition-group name="drop"
        v-on:before-enter="beforeEnter"
        v-on:enter="enter"
-       v-on:after-enter="afterEnter" tag="ul">
+       v-on:after-enter="afterEnter" tag="li">
         <li v-for=" ball in balls" v-bind:key="ball.show" v-show="ball.show" class="ball">
           <div class="inner inner-hook"></div>
         </li>
       </transition-group>
     </div>
+    <transition name="fold">
+      <div  class="shopcart-list" v-show="listShow">
+        <div class="mask" @click="hideList"></div>
+        <div class="list-header" v-bind:key="fold">
+          <div class="title">购物车</div>
+          <div class="empty" @click="empty">清空</div>
+        </div>
+        <div class="list-content">
+          <ul>
+            <li v-for="food in selectFoods" v-bind:key="food.name" class="food">
+              <span class="name">{{food.name}}</span>
+              <div class="price"><span>￥{{food.price*food.count}}</span></div>
+              <div class="cartcontral-wrapper">
+                <cart-contral :food="food"></cart-contral>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
+  import cartContral from '../cartContral/cartcontral.vue'
+  import BScroll from 'better-scroll'
+
   export default {
     props: {
       selectFoods: {
@@ -45,6 +68,9 @@
         type: Number,
         default: 0
       }
+    },
+    components: {
+      cartContral
     },
     data () {
       return {
@@ -65,7 +91,8 @@
             show: false
           }
         ],
-        dropBalls: []
+        dropBalls: [],
+        fold: true
       }
     },
     computed: {
@@ -99,9 +126,32 @@
         } else {
           return 'enough'
         }
+      },
+      listShow () {
+        if (!this.totalCount) {
+          this.fold = true
+          return false
+        }
+        let show = !this.fold
+        if (show) {
+          this.$nextTick(() => {
+            if (!this.scroll) {
+              console.log(this.$el.querySelector('.list-content'))
+              this.scroll = new BScroll(this.$el.querySelector('.list-content'), {
+                click: true
+              })
+            } else {
+              this.scroll.refresh()
+            }
+          })
+        }
+        return show
       }
     },
     methods: {
+      hideList () {
+        this.fold = true
+      },
       drop (el) {
         for (let i = 0; i < this.balls.length; i++) {
           let ball = this.balls[i]
@@ -115,7 +165,6 @@
       },
       beforeEnter (el) {
         let count = this.balls.length
-        this.balls[1].show = true
         while (count--) {
           let ball = this.balls[count]
           if (ball.show) {
@@ -135,10 +184,10 @@
         let rf = el.offsetHeight
         this.$nextTick(() => {
           el.style.display = ''
-          el.style.webkitTransform = 'translate3d(0, 0, 0)'
+          el.style.webkitTransform = 'translate3d(0, 40px, 0)'
           let inner = el.getElementsByClassName('inner')[0]
-          inner.style.webkitTransform = 'translate3d(0, 0, 0)'
-          inner.style.transform = 'translate3d(0, 0, 0)'
+          inner.style.webkitTransform = 'translate3d(0, 40px, 0)'
+          inner.style.transform = 'translate3d(0, 40px, 0)'
         })
       },
       afterEnter (el) {
@@ -146,6 +195,24 @@
         if (ball) {
           ball.show = false
           el.style.display = 'none'
+        }
+      },
+      toggleList () {
+        if (!this.totalCount) {
+          return
+        }
+        this.fold = !this.fold
+      },
+      empty () {
+        this.selectFoods.forEach((food) => {
+          food.count = 0
+        })
+      },
+      pay () {
+        if (this.totalPrice < this.minPrice) {
+          return
+        } else {
+          alert(`请支付${this.totalPrice}元`)
         }
       }
     }
