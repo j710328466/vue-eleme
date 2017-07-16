@@ -1,4 +1,4 @@
-<template>
++<template>
   <div id="app">
     <v-header :seller = 'seller'></v-header>
     <div class="tab">

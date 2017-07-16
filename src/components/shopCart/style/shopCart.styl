@@ -88,12 +88,12 @@
       list-style none
       &.drop-transition
         transition all .4s cubic-bezier(.49, -.29, .75, .41)
-          .inner
-            width 16px
-            height 16px
-            border-radius 50%
-            background rgb(0, 160, 220)
-            transition all .4s linear
+      .inner
+        width 16px
+        height 16px
+        border-radius 50%
+        background rgb(0, 160, 220)
+        transition all .4s linear
   .shopcart-list
     position absolute
     left 0
@@ -110,6 +110,7 @@
       transform translate3d(0, 0, 0)
     &.fold-enter, .fold-leave-to
       opacity .9
+      transform translate3d(0, 0, 0)
     .mask
       position fixedW
       width 100vh
@@ -121,6 +122,7 @@
       line-height 40px
       padding 0 10px
       background #f3f5f7
+      z-index 1
       border-bottom 1px solid rgba(7, 17, 27, 0.1)
       .title
         font-size 14px
@@ -134,11 +136,15 @@
         color rgb(0, 160, 220)
     .list-content
       background #fff
+      padding 0 18px
+      max-height 180px
+      overflow hidden
       .food
         display flex
-        box-sizing border-box
         padding 0 10px
         line-height 38px
+        overflow hidden
+        box-sizing border-box
         border-bottom 1px solid rgba(7, 17, 27, 0.1)
         .name
           flex 1

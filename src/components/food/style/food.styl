@@ -1,0 +1,101 @@
+@import "../../../common/stylus/mixin.styl"
+.food
+  position fixed
+  top 0
+  left 0
+  bottom 48px
+  z-index 30
+  width 100%
+  background #fff
+  transition all .4s linear
+  &.move-leave-active
+    transform translate3d(100%, 0, 0)
+  &.move-enter,&.move-leave
+    transform translate3d(100%, 0, 0)
+  .image-header
+    position relative
+    width 100%
+    height 0
+    padding-top 100%
+    img
+      position absolute
+      top 0
+      left 0
+      width 100%
+      height 100%
+    .back
+      position absolute
+      top 10px
+      left 10px
+      .icon-leave
+        display inline-block
+        width 20px
+        height 20px
+        background rgb(15, 108, 175);
+        color #fff
+  .content
+    padding 18px
+    position relative
+    border-1px(rgba(7, 17, 27, .1))
+    .title
+      font-size 14px
+      line-height 14px
+      font-weight 700
+      color rgb(7, 17, 27)
+      margin-bottom 8px
+    .detail
+      margin-bottom 18px
+      line-height 10px
+      font-size 0
+      height 10px
+      .sell-count,.rating
+        font-size 10px
+        color rgb(147, 153, 159)
+      .sell-count
+        margin-right 12px
+    .price
+      font-weight 700
+      line-height 24px
+      .now
+        margin-right 8px
+        font-size 14px
+        color rgb(240, 0, 0)
+      .old
+        text-decoration line-through
+        font-size 10px
+        color rgb(147, 153, 159)
+
+  .cartcontrol-wrapper
+    position absolute
+    right 12px
+    bottom 12px
+  .buy
+    position absolute
+    right 18px
+    bottom 18px
+    z-index 10
+    height 24px
+    line-height 24px
+    padding 0 12px
+    font-size 10px
+    color #fff
+    box-sizing border-box
+    border-radius 12px
+    background rgb(0, 160, 220)
+    &.fade-leave-active,&.fade-enter-active
+      transition all .5s ease
+    &.fade-enter,&.fade-leave
+      transform scale(1.08)
+  .info
+    padding 18px
+    .title
+      line-height 14px
+      font-size 14px
+      margin-bottom 6px
+      color rgb(7, 17, 27)
+    .text
+      font-size 12px
+      font-weight 200
+      color rgb(77, 86, 93)
+      line-height 24px
+      padding 0 8px
